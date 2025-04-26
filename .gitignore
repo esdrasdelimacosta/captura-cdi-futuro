@@ -6,3 +6,4 @@ venv/
 Logs/
 TEMP_FILES/
 Temp_Files/
+.venv/

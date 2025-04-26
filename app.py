@@ -1,10 +1,9 @@
-import os
 import time
 from utils.captura_dados import captura_dados_b3
 from utils.db_integracao import insert_data_to_table
 
 def main():
-    os.system('cls')
+    
     tempo_inicial = time.time()
     
     print("[INFO] Iniciando Captura de dados...")

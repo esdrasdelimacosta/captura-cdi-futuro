@@ -1,31 +1,21 @@
 import pyodbc
 import pandas as pd
-from sqlalchemy import create_engine, text 
-
-#variaveis conexao banco
-server = '10.175.84.61'
-database = 'Solis'
-username = 'integr_db'
-password = '6FJtQ4g$L5VW'
-
-# Função para criar conexão com o SQLAlchemy
-def conecta_banco_alchemy():
-    '''
-    Cria um engine SQLAlchemy para o banco de dados SQL Server.
-    '''
-    connection_string = (
-        f'mssql+pyodbc://{username}:{password}@{server}/{database}?'
-        'driver=ODBC+Driver+17+for+SQL+Server'
-    )
-    engine = create_engine(connection_string)
-    
-    return engine
+from airflow.hooks.base import BaseHook
 
 def conecta_banco():
+    driver = "ODBC Driver 17 for SQL Server"
+    conn = BaseHook.get_connection("sqlserver_conn_solis")  # Nome da conexão no Airflow
+    conn_str = (
+        f"DRIVER={driver};"
+        f"SERVER={conn.host};"
+        f"DATABASE={conn.schema};"
+        f"UID={conn.login};"
+        f"PWD={conn.password};"
+        f"PORT={conn.port or 1433}"
+    )
 
-    driver = '{ODBC Driver 17 for SQL Server}'
-    conn_str = f'DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-    return pyodbc.connect(conn_str)
+    connection = pyodbc.connect(conn_str)
+    return connection
 
 def insert_data_to_table(df, table_name):
     """
