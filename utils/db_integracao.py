@@ -1,5 +1,4 @@
 import pyodbc
-import pandas as pd
 from airflow.hooks.base import BaseHook
 
 def conecta_banco():

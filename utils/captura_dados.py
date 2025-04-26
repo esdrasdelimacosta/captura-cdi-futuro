@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import os
+import tempfile
 import time
 import pandas as pd
 from datetime import timedelta, date
@@ -15,11 +16,16 @@ def captura_dados_b3():
    url = 'https://www2.bmf.com.br/pages/portal/bmfbovespa/lumis/lum-taxas-referenciais-bmf-ptBR.asp'
 
 
+   # Cria uma pasta temporária
+   temp_profile = tempfile.mkdtemp()
+
    # Configurações do Chrome para definir o diretório de download e modo headless
    chrome_options = Options()
    chrome_options.add_argument('--headless=new')  # Utiliza o novo modo headless
+   chrome_options.add_argument(f"--user-data-dir={temp_profile}")
    chrome_options.add_argument('--no-sandbox')
    chrome_options.add_argument('--disable-dev-shm-usage')
+   chrome_options.add_argument('--remote-debugging-port=0')  # <-- Adicione esta linha aqui!
    chrome_options.add_experimental_option('prefs', {
       'download.default_directory': TEMP_DIR,
       'download.prompt_for_download': False,
